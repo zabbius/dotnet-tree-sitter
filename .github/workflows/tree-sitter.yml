@@ -96,23 +96,23 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
           name: native-linux-x64
-          path: dotnet/native
+          path: native/out
     - uses: actions/download-artifact@v4
       with:
           name: native-linux-arm64
-          path: dotnet/native
+          path: native/out
     - uses: actions/download-artifact@v4
       with:
           name: native-macos-arm64
-          path: dotnet/native
+          path: native/out
     - uses: actions/download-artifact@v4
       with:
           name: native-macos-intel
-          path: dotnet/native
+          path: native/out
     - uses: actions/download-artifact@v4
       with:
           name: native-windows-x64
-          path: dotnet/native
+          path: native/out
 
     - name: Build core binding
       run: dotnet/make-tree-sitter-core.sh ${{ github.run_number }}
