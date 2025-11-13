@@ -1,6 +1,5 @@
 CFLAGS=/nologo /FC /Gy /diagnostics:column /Ilib/include
-#LFLAGS=/def:$(@B).def /incremental:no
-LFLAGS=/incremental:no
+LFLAGS=/def:$(@B).def /incremental:no
 
 all: tree-sitter.dll
 

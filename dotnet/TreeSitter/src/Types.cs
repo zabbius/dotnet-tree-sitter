@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 
 namespace TreeSitter;
@@ -50,10 +49,13 @@ public enum QueryError
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct Point(uint row, uint column)
+public readonly struct Point(uint row, uint column)
 {
     public readonly uint Row = row;
     public readonly uint Column = column;
+
+    public override string ToString() => $"{Row}:{Column}";
+
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -63,6 +65,8 @@ public struct Range
     public Point EndPoint;
     public uint StartByte;
     public uint EndByte;
+
+    public override string ToString() => $"{StartPoint}-{EndPoint}";
 }
 
 [StructLayout(LayoutKind.Sequential)]

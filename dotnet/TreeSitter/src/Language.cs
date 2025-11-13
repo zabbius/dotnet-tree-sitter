@@ -49,7 +49,7 @@ public class Language : IDisposable
 
     public string SymbolName(ushort symbol) => symbol != ushort.MaxValue ? Symbols[symbol] : "ERROR";
     public ushort SymbolForName(string str, bool isNamed) => Binding.ts_language_symbol_for_name(Ptr, str, (uint)str.Length, isNamed);
-    public ushort FieldIdForName(string str) => Binding.ts_language_field_id_for_name(Ptr, str, (uint)str.Length);
+    public ushort FieldIdForName(string str) => FieldIds.GetValueOrDefault(str, (ushort)0);
     public SymbolType SymbolType(ushort symbol) => Binding.ts_language_symbol_type(Ptr, symbol);
 
 

@@ -12,6 +12,7 @@ cd tree-sitter
 
 del Makefile
 copy ..\Makefile.windows.tree-sitter Makefile
+copy ..\tree-sitter.windows.def tree-sitter.def
 
 nmake tree-sitter.dll
 
