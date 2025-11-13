@@ -22,3 +22,18 @@
 [submodule "tree-sitter/tree-sitter-go"]
 	path = native/tree-sitter-go
 	url = https://github.com/tree-sitter/tree-sitter-go.git
+[submodule "tree-sitter/tree-sitter-ruby"]
+	path = native/tree-sitter-ruby
+	url = https://github.com/tree-sitter/tree-sitter-ruby.git
+[submodule "tree-sitter/tree-sitter-typescript"]
+	path = native/tree-sitter-typescript
+	url = https://github.com/tree-sitter/tree-sitter-typescript.git
+[submodule "native/tree-sitter-ruby"]
+	path = native/tree-sitter-ruby
+	url = https://github.com/tree-sitter/tree-sitter-ruby.git
+[submodule "native/tree-sitter-typescript"]
+	path = native/tree-sitter-typescript
+	url = https://github.com/tree-sitter/tree-sitter-typescript.git
+[submodule "native/tree-sitter-bsl"]
+	path = native/tree-sitter-bsl
+	url = https://github.com/alkoleft/tree-sitter-bsl.git

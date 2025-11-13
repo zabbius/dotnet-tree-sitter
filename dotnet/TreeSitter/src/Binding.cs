@@ -6,7 +6,7 @@ namespace TreeSitter;
 internal static class Binding
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct LoggerData
+    public record struct LoggerData
     {
         public IntPtr Payload;
         internal LogCallback Log;
@@ -17,7 +17,7 @@ internal static class Binding
         [MarshalAs(UnmanagedType.LPUTF8Str)] string message);
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct TreeCursor
+    public record struct TreeCursor
     {
         public IntPtr Tree;
         public IntPtr Id;
@@ -28,7 +28,7 @@ internal static class Binding
 
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Node
+    public record struct Node
     {
         public uint Context0;
         public uint Context1;
@@ -39,14 +39,14 @@ internal static class Binding
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct QueryCapture
+    public record struct QueryCapture
     {
         public Node Node;
         public uint Index;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct QueryMatch
+    public record struct QueryMatch
     {
         public uint Id;
         public ushort PatternIndex;
@@ -54,7 +54,7 @@ internal static class Binding
         public IntPtr Captures;
     }
 
-    
+
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
     public static extern void ts_query_delete(IntPtr query);
 
@@ -75,12 +75,15 @@ internal static class Binding
     public static extern QueryPredicateStep[] ts_query_predicates_for_pattern(IntPtr query, uint patternIndex, out uint length);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_query_is_pattern_rooted(IntPtr query, uint patternIndex);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_query_is_pattern_non_local(IntPtr query, uint patternIndex);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_query_is_pattern_guaranteed_at_step(IntPtr query, uint byteOffset);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
@@ -118,12 +121,15 @@ internal static class Binding
     public static extern ushort ts_tree_cursor_current_field_id(ref TreeCursor cursor);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_tree_cursor_goto_parent(ref TreeCursor cursor);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_tree_cursor_goto_next_sibling(ref TreeCursor cursor);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_tree_cursor_goto_first_child(ref TreeCursor cursor);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
@@ -190,26 +196,36 @@ internal static class Binding
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
     public static extern void free(IntPtr str);
-    
-    
-    
+
+
+
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_is_null(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_is_named(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_is_missing(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_is_extra(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_has_changes(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_has_error(Node node);
+
+    [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static extern bool ts_node_is_error(Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
     public static extern Node ts_node_parent(Node node);
@@ -267,6 +283,7 @@ internal static class Binding
     public static extern Node ts_node_named_descendant_for_point_range(Node self, Point startPoint, Point endPoint);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_node_eq(Node node1, Node node2);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
@@ -283,7 +300,7 @@ internal static class Binding
     public static extern IntPtr ts_parser_language(IntPtr parser);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
-    //[return: MarshalAs(UnmanagedType.I1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_parser_set_included_ranges(IntPtr parser,
         [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] Range[] ranges, uint length);
 
@@ -327,6 +344,7 @@ internal static class Binding
     public static extern void ts_query_cursor_exec(IntPtr cursor, IntPtr query, Node node);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_query_cursor_did_exceed_match_limit(IntPtr cursor);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
@@ -342,12 +360,14 @@ internal static class Binding
     public static extern void ts_query_cursor_set_point_range(IntPtr cursor, Point start_point, Point end_point);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool ts_query_cursor_next_match(IntPtr cursor, out QueryMatch match);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
     public static extern void ts_query_cursor_remove_match(IntPtr cursor, uint id);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool  ts_query_cursor_next_capture(IntPtr cursor, out QueryMatch match, out uint capture_index);
 
     [DllImport("tree-sitter", CallingConvention = CallingConvention.Cdecl)]

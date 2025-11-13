@@ -8,8 +8,11 @@ public sealed class QueryCursor : IDisposable
     internal IntPtr Ptr;
     internal readonly Query Query;
 
-    internal QueryCursor(Query query)
+    public Tree Tree { get; }
+    
+    internal QueryCursor(Query query, Tree tree)
     {
+        Tree = tree;
         Query = query;
         Ptr = Binding.ts_query_cursor_new();
     }
@@ -62,7 +65,7 @@ public sealed class QueryCursor : IDisposable
             var intPtr = nativeMatch.Captures + Marshal.SizeOf(typeof(Binding.QueryCapture)) * n;
             var nativeCapture = Marshal.PtrToStructure<Binding.QueryCapture>(intPtr);
 
-            match.Captures[n] = new QueryCapture(nativeCapture.Index, Node.FromNative(nativeCapture.Node));
+            match.Captures[n] = new QueryCapture(nativeCapture.Index, Node.FromNative(nativeCapture.Node, Tree));
         }
 
         return match;
@@ -78,7 +81,7 @@ public sealed class QueryCursor : IDisposable
         }
         var intPtr = nativeMatch.Captures + Marshal.SizeOf(typeof(Binding.QueryCapture)) * (ushort)captureIndex;
         var nativeCapture = Marshal.PtrToStructure<Binding.QueryCapture>(intPtr);
-        return new QueryCapture(nativeCapture.Index, Node.FromNative(nativeCapture.Node));
+        return new QueryCapture(nativeCapture.Index, Node.FromNative(nativeCapture.Node, Tree));
 
     }
 

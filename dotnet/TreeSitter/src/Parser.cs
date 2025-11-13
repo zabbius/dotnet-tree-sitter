@@ -1,11 +1,11 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace TreeSitter;
 
 public sealed class Parser : IDisposable
 {
     private IntPtr Ptr { get; set; }
+    public Language Language { get; private set; }
 
     public Parser()
     {
@@ -30,23 +30,26 @@ public sealed class Parser : IDisposable
         }
     }
 
-    public bool SetLanguage(Language language) => Binding.ts_parser_set_language(Ptr, language.Ptr);
-
-    public Language Language()
+    public bool SetLanguage(Language language)
     {
-        var ptr = Binding.ts_parser_language(Ptr);
-        return ptr != IntPtr.Zero ? TreeSitter.Language.FromNative(ptr) : null;
+        if (Binding.ts_parser_set_language(Ptr, language.Ptr))
+        {
+            Language = language;
+            return true;
+        }
+
+        return false;
     }
 
     public bool SetIncludedRanges(Range[] ranges) => Binding.ts_parser_set_included_ranges(Ptr, ranges, (uint)ranges.Length);
 
     public Range[] IncludedRanges() => Binding.ts_parser_included_ranges(Ptr, out _);
 
-    public Tree ParseString(string input, Tree oldTree = null)
+    public Tree ParseString(string source, Tree oldTree = null)
     {
         var ptr = Binding.ts_parser_parse_string_encoding(Ptr, oldTree?.Ptr ?? IntPtr.Zero,
-            input, (uint)input.Length * 2, InputEncoding.InputEncodingUTF16);
-        return ptr != IntPtr.Zero ? new Tree(ptr) : null;
+            source, (uint)source.Length * 2, InputEncoding.InputEncodingUTF16);
+        return ptr != IntPtr.Zero ? new Tree(ptr, Language) : null;
     }
 
     public void Reset() => Binding.ts_parser_reset(Ptr);

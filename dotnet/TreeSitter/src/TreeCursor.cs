@@ -5,19 +5,20 @@ namespace TreeSitter;
 public sealed class TreeCursor : IDisposable
 {
     bool _disposed;
-    internal readonly Language Lang;
     internal Binding.TreeCursor NativeCursor;
 
-    internal TreeCursor(Binding.TreeCursor cursor, Language lang)
+    public Tree Tree { get; }
+
+    internal TreeCursor(Binding.TreeCursor cursor, Language language, Tree tree)
     {
         NativeCursor = cursor;
-        Lang = lang;
+        Tree = tree;
     }
 
-    public TreeCursor(Node node, Language lang)
+    public TreeCursor(Node node)
     {
+        Tree = node.Tree;
         NativeCursor = Binding.ts_tree_cursor_new(node.NativeNode);
-        Lang = lang;
     }
 
     public void Dispose()
@@ -30,11 +31,11 @@ public sealed class TreeCursor : IDisposable
     }
 
     public void Reset(Node node) => Binding.ts_tree_cursor_reset(ref NativeCursor, node.NativeNode);
-    public Node CurrentNode() => new (Binding.ts_tree_cursor_current_node(ref NativeCursor));
+    public Node CurrentNode() => new (Binding.ts_tree_cursor_current_node(ref NativeCursor), Tree);
 
-    public string CurrentField() => Lang.Fields[Binding.ts_tree_cursor_current_field_id(ref NativeCursor)];
+    public string CurrentField() => Tree.Language.Fields[Binding.ts_tree_cursor_current_field_id(ref NativeCursor)];
 
-    public string CurrentSymbol() => Lang.SymbolName(Binding.ts_node_symbol(Binding.ts_tree_cursor_current_node(ref NativeCursor)));
+    public string CurrentSymbol() => Tree.Language.SymbolName(Binding.ts_node_symbol(Binding.ts_tree_cursor_current_node(ref NativeCursor)));
 
     public bool GotoParent() => Binding.ts_tree_cursor_goto_parent(ref NativeCursor);
 
@@ -46,5 +47,5 @@ public sealed class TreeCursor : IDisposable
 
     public long GotoFirstChildForPoint(Point point) => Binding.ts_tree_cursor_goto_first_child_for_point(ref NativeCursor, point);
 
-    public TreeCursor Copy() => new(Binding.ts_tree_cursor_copy(ref NativeCursor), Lang);
+    public TreeCursor Copy() => new(Binding.ts_tree_cursor_copy(ref NativeCursor), Tree.Language, Tree);
 }
