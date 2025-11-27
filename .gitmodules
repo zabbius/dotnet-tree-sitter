@@ -36,4 +36,4 @@
 	url = https://github.com/tree-sitter/tree-sitter-typescript.git
 [submodule "native/tree-sitter-bsl"]
 	path = native/tree-sitter-bsl
-	url = https://github.com/zabbius/tree-sitter-bsl.git
+	url = git@github.com:zabbius/tree-sitter-bsl.git
